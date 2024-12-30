@@ -1,10 +1,11 @@
 import db from "../models/db.js";
 import generateSlots from "../common/utills/generateSlots.js";
+import updateUserStatus from "./traceUser.js"
 
 
 const bookSlot= async (req, res) => {
     const { date, slot, userId } = req.body;
-  
+  console.log("Slots payload--------->", {date, slot, userId})
     if (!date || !slot || !userId) {
       return res
         .status(400)
@@ -12,6 +13,8 @@ const bookSlot= async (req, res) => {
     }
   
     try {
+      await updateUserStatus(userId, date);
+      console.log("User status updated successfully.");
       const slotDocRef = db.collection("slots").doc(date);
       const slotDoc = await slotDocRef.get();
   
@@ -34,8 +37,6 @@ const bookSlot= async (req, res) => {
       if (data.bookedSlots[slot]) {
         return res.status(400).json({ error: "Slot already booked." });
       }
-      console.log("AvailableSlots==============>", data.availableSlots);
-      console.log("slot==============>", slot);
   
       // Check if the slot is valid
       if (!data.availableSlots.includes(slot)) {
@@ -54,7 +55,7 @@ const bookSlot= async (req, res) => {
       return res.status(200).json({ message: "Slot booked successfully." });
     } catch (error) {
       console.error("Error booking slot:", error);
-      return res.status(500).json({ error: "Error booking slot." });
+      return res.status(500).json({ error: error.message??"Error booking slot." });
     }
   }
 

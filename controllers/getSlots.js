@@ -1,13 +1,18 @@
 import db from "../models/db.js";
-
-const getSlots =  async (req, res) => {
-  const { date } = req.query;
+import { getUserStatus } from "./traceUser.js";
+const getSlots = async (req, res) => {
+  const { date, userId } = req.query;
 
   if (!date) {
     return res.status(400).json({ error: "Date is required." });
   }
 
   try {
+    const status = await getUserStatus(userId);
+    if (status.dateBooked.length >= ((process.env.BOOK_LIMIT)??5)) {
+      throw new Error(`Limit exceeded! You can only book appointments for up to ${(process.env.BOOK_LIMIT)??5} days.`);
+    }
+    console.log("Successfully Verified user book status.")
     const slotDoc = await db.collection("slots").doc(date).get();
     console.log("---------------------->", date);
     if (!slotDoc.exists) {
@@ -20,7 +25,7 @@ const getSlots =  async (req, res) => {
       bookedSlots: data.bookedSlots,
     });
   } catch (error) {
-    res.status(500).json({ error: "Error fetching slots." });
+    res.status(500).json({ error: error?.message ?? "Error fetching slots." });
   }
 };
 
