@@ -8,6 +8,9 @@ app.use(cors());
 app.use(express.json());
 app.use(urlencoded({ extended: true }));
 app.use(requestLoggerMiddleware);
+app.get("/", (req, res) => {
+  res.status(200).json({ message: "HealthCheck Passed" });
+});
 app.use("/api",bookingRoute);
 
 const port = process.env.PORT || 3000;
