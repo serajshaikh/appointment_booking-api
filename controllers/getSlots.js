@@ -11,7 +11,7 @@ const getSlots = async (req, res) => {
   try {
     const status = await getUserStatus(userId);
     if (status.dateBooked.length >= ((process.env.BOOK_LIMIT)??5)) {
-      throw new Error(`Limit exceeded! You can only book appointments for up to ${(process.env.BOOK_LIMIT)??5} days.`);
+      throw new Error(`Your booking limit exceeded! You can only book appointments for up to ${(process.env.BOOK_LIMIT)??5} days.`);
     }
     console.log("Successfully Verified user book status.")
     const slotDoc = await db.collection("slots").doc(date).get();

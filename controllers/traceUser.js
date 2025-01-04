@@ -42,7 +42,7 @@ const updateUserStatus = async (userId, date) => {
 
     // Check if the user has already booked for 5 days
     if (data.dateBooked.length >= (process.env.BOOK_LIMIT ?? 5)) {
-      throw new Error(`Limit exceeded! You can only book appointments for up to ${(process.env.BOOK_LIMIT)??5} days.`);
+      throw new Error(`Your booking limit exceeded! You can only book appointments for up to ${(process.env.BOOK_LIMIT)??5} days.`);
     }
 
     // Add the new date to the booked dates
@@ -52,7 +52,7 @@ const updateUserStatus = async (userId, date) => {
     console.error("Error in updating user status:", error);
     throw new Error(
       error.message ??
-        `Limit exceeded! You can only book appointments for up to ${
+        `Your booking limit exceeded! You can only book appointments for up to ${
           process.env.BOOK_LIMIT ?? 5
         } days.`
     );
