@@ -5,7 +5,7 @@ import bookSlot from "../controllers/bookSlot.js";
 const router = Router();
 
 // Define routes
-router.get("/api/slots", getSlots);
-router.post("/api/bookSlot", bookSlot);
+router.get("/slots", getSlots);
+router.post("/bookSlot", bookSlot);
 
 export default router;

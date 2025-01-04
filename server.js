@@ -8,7 +8,7 @@ app.use(cors());
 app.use(express.json());
 app.use(urlencoded({ extended: true }));
 app.use(requestLoggerMiddleware);
-app.use(bookingRoute);
+app.use("/api",bookingRoute);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
